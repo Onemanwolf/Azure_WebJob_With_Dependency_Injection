@@ -1,4 +1,5 @@
-﻿using Polly;
+﻿using Microsoft.Extensions.Configuration;
+using Polly;
 using Polly.CircuitBreaker;
 using Polly.Retry;
 using System.Net.Http;
@@ -8,19 +9,25 @@ using System.Threading.Tasks;
 
 namespace WebJobSDKSample
 {
-    public class HttpClientFactoryService : IHttpClientFactoryService
+    public class HttpClientFactoryService : IHttpClientFactoryService 
     {
         private readonly AsyncRetryPolicy _retryPolicy; //you can init here if you like
         private readonly IHttpClientFactory _httpClientFactory;
         private const int MaxRetries = 3;
         private readonly AsyncCircuitBreakerPolicy<HttpResponseMessage> _circuitBreaker;
+        private readonly IConfiguration _configuration;
 
-        public HttpClientFactoryService(IHttpClientFactory httpClientFactory, AsyncCircuitBreakerPolicy<HttpResponseMessage> circuitBreaker)
+        public HttpClientFactoryService(IHttpClientFactory httpClientFactory, AsyncCircuitBreakerPolicy<HttpResponseMessage> 
+            circuitBreaker, IConfiguration configuration)
         {
 
             //add in Service Configuration 
             _httpClientFactory = httpClientFactory;
             _circuitBreaker = circuitBreaker;
+
+            // injection configuration 
+            _configuration = configuration;
+
 
             //init policy
             _retryPolicy = Policy.Handle<HttpRequestException>().RetryAsync(MaxRetries);
@@ -39,7 +46,9 @@ namespace WebJobSDKSample
 
        
             HttpClient client = _httpClientFactory.CreateClient();
-            var uri = "https://YourUriGoesHere";
+
+            //Add Configuration
+            var uri = _configuration["BaseAddress"] + "/api/TimeCard";
             HttpResponseMessage response = await _retryPolicy.ExecuteAsync(
                 () => _circuitBreaker.ExecuteAsync( () => client.PostAsync(requestUri: uri, stringContent)
                     ));

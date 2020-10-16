@@ -23,13 +23,13 @@ namespace WebJobSDKSample
             var host = builder.ConfigureServices((context, services) =>
             {
 
-                
+
                 // add CircuitBreaker Policy
                 AsyncCircuitBreakerPolicy<HttpResponseMessage> breakerPolicy = Policy.HandleResult<HttpResponseMessage>(
                 r => !r.IsSuccessStatusCode).AdvancedCircuitBreakerAsync<HttpResponseMessage>(0.5, TimeSpan.FromSeconds(15), 7, TimeSpan.FromSeconds(15), OnBreak, OnRest, onHalfOpen: OnHalfOpen);
 
                 services.AddSingleton<AsyncCircuitBreakerPolicy<HttpResponseMessage>>(breakerPolicy);
-              
+
                 services.AddHttpClient();
                 //Our Service we injected into the Functions Class
                 services.AddSingleton<IHttpClientFactoryService, HttpClientFactoryService>();
@@ -50,7 +50,7 @@ namespace WebJobSDKSample
             })
 
 
-            // setup configuration 
+            // setup configuration
             .ConfigureAppConfiguration((hostingContext, config) =>
             {
 
@@ -62,26 +62,23 @@ namespace WebJobSDKSample
                 optional: true,
                 reloadOnChange: true);
             }
-            
+
             )
             .ConfigureLogging((context, b) =>
             {
 
                 b.AddConsole();
             })
-           
+
             .Build();
-            
+
             using (host)
             {
-                
+
                 await host.RunAsync();
             }
 
-            //You use a Starup as well if you wanted to 
-            //var builder = new HostBuilder()
-            //.UseStartup<Startup>()
-            //...omitted for brevity
+            
         }
 
         private static void OnHalfOpen()
@@ -94,7 +91,7 @@ namespace WebJobSDKSample
             Debug.WriteLine("Connection reset");
         }
 
-             
+
 
         private static void OnBreak(DelegateResult<HttpResponseMessage> delegateResult, TimeSpan timespan)
         {

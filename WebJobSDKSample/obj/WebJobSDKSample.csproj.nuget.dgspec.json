@@ -45,6 +45,14 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Azure.Identity": {
+              "target": "Package",
+              "version": "[1.2.3, )"
+            },
+            "Azure.Security.KeyVault.Secrets": {
+              "target": "Package",
+              "version": "[4.1.0, )"
+            },
             "Microsoft.Azure.WebJobs.Extensions": {
               "target": "Package",
               "version": "[3.0.6, )"
@@ -57,6 +65,10 @@
               "target": "Package",
               "version": "[4.0.2, )"
             },
+            "Microsoft.Extensions.Configuration.AzureKeyVault": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "Microsoft.Extensions.DependencyInjection": {
               "target": "Package",
               "version": "[3.1.5, )"
@@ -68,6 +80,22 @@
             "Microsoft.Extensions.Logging.Console": {
               "target": "Package",
               "version": "[3.1.5, )"
+            },
+            "NLog": {
+              "target": "Package",
+              "version": "[4.7.5, )"
+            },
+            "NLog.Extensions.AzureBlobStorage": {
+              "target": "Package",
+              "version": "[2.4.0, )"
+            },
+            "NLog.Extensions.AzureEventHub": {
+              "target": "Package",
+              "version": "[2.5.0, )"
+            },
+            "NLog.Web.AspNetCore": {
+              "target": "Package",
+              "version": "[4.9.3, )"
             },
             "Polly": {
               "target": "Package",
@@ -85,6 +113,9 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
